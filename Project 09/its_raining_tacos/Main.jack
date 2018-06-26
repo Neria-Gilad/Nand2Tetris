@@ -1,0 +1,23 @@
+class Main {
+
+    /** Initializes a new game and starts it. */    
+    function void main() {
+        
+        var Game game;
+        let game = Game.new(100); 
+        
+        //do Screen.setColor(true);
+        //do Screen.drawRectangle(3, 3, 20, 20);
+        
+        
+        do game.run(); 
+	    do game.dispose(); 
+
+
+        //var Random r;
+        //var int x;
+        //let r = Random.new();
+        //let x = r.rand(2,5);
+        return;   
+    }
+}

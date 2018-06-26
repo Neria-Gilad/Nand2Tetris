@@ -1,0 +1,231 @@
+class Game {
+    field Array falling; 
+    field Rectangle player; 
+    field boolean alive; 
+    field int len, tik, score, levelCounter, level; 
+    field Random random; 
+    constructor Game new(int size)
+     {
+        var int i; 
+        let len = size; 
+        let score = 0; 
+        let level = 1; 
+        let levelCounter = 0; 
+        let falling = Array.new(len * 20); 
+        let alive = true; 
+        let random = Random.new(); 
+        let i = 0; 
+        while (i < len) {
+            let falling[i] = Rectangle.new(0, 0, 0); 
+			let i = i + 1; 
+        }
+        let player = Rectangle.new(127, 235, 5); 
+        return this; 
+    }
+
+    method boolean didHeDieded() {
+        var boolean overlap; 
+        var Rectangle tmp; 
+        var int i; 
+        var int px1, px2, py1, py2, tx1, tx2, ty1, ty2; 
+        let px1 = player.getX(); 
+        let py1 = player.getY(); 
+        let px2 = px1 + player.getSizeX(); 
+        let py2 = py1 + player.getSizeY(); 
+
+        let i = 0; 
+        while (i < len) {
+            let tmp = falling[i]; 
+            if (tmp.isValid()) 
+            {
+                let tx1 = tmp.getX(); 
+                let ty1 = tmp.getY(); 
+                let tx2 = tx1 + tmp.getSizeX(); 
+                let ty2 = ty1 + tmp.getSizeY(); 
+
+                let overlap = ~((px1 > tx2) | (tx1 > px2) | (py1 > ty2) | (ty1 > py2)); 
+                if (overlap) {
+                    return true; 
+                }
+            }
+			let i = i + 1; 
+        }
+        return false; 
+    }
+
+    method void dispose() {
+        do falling.dispose(); 
+        do player.dispose(); 
+        do Memory.deAlloc(this); 
+        return; 
+    }
+
+    method void round(int direction) {
+        //do drawCollection(false); 
+        do player.draw(false); 
+        do advancePlayer(direction); 
+        do player.draw(true); 
+        do advanceCollection(); 
+        //do drawCollection(true); 
+        if (alive) {
+            let alive = ~didHeDieded(); 
+        }
+        return; 
+    }
+
+    method void moreRain() {
+        var int i; 
+        var Rectangle tmp; 
+        let i = 0; 
+        while (i < len) {
+			let tmp = falling[i]; 
+            if (~(tmp.isValid())) {
+                do tmp.dispose(); 
+                let tmp = Rectangle.new(random.rand(5, 497), 0, random.rand(4, 7)); 
+                let score = score + 1; 
+               do printScore(); 
+				return; 
+            }
+			let i = i + 1; 
+        }
+        
+        return; 
+    }
+
+    method void tik() {
+        var int i; 
+        let tik = tik + 1; 
+        let levelCounter = levelCounter + 1; 
+        if (tik > 3) {
+                let tik = 0; 
+                let i = 0; 
+               while (i < level) {
+                    do moreRain(); 
+                    let i = i + 1; 
+                }
+        }
+        if (levelCounter > 30) {
+            let level = level + 1; 
+            let levelCounter = 0; 
+        }
+        return; 
+    }
+
+    method void reset() {
+        var Rectangle tmp; 
+        var int i; 
+        let score = 0; 
+        let level = 1; 
+        let i = 0; 
+        let alive = true; 
+        while (i < len) {
+            let tmp = falling[i]; 
+            do tmp.dispose(); 
+            let falling[i] = Rectangle.new(0, 0, 0); 
+			let i = i + 1; 
+        }
+        do printScore(); 
+        do player.draw(true); 
+        return; 
+    }
+
+
+
+    method void printScore() {
+        do Screen.setColor(true); 
+        do Output.moveCursor(1, 50); 
+        do Output.printString("score: "); 
+		do Output.printInt(score); 
+        do Output.printString("  "); 
+        
+        return; 
+    }
+
+    method void run() {
+        var char key; 
+        var int direction; 
+        var boolean break; 
+        let direction = 0; 
+        do player.draw(true); 
+        
+        do printScore(); 
+        while (alive) {
+            let break = false; 
+            while (key = 0) {
+                let key = Keyboard.keyPressed(); 
+                do round(direction); 
+                do tik(); 
+                if (~alive) {
+                    do reset(); 
+                }
+            }
+            if (key = 130) {
+                let direction = -1; 
+            }
+            if (key = 132) {
+                let direction = 1; 
+            }
+
+            while (~(key = 0)) {
+                let key = Keyboard.keyPressed(); 
+                do round(direction); 
+                do tik(); 
+                if (~alive) {
+                    do reset(); 
+                }
+            }
+            let direction = 0; //stop after let go of key
+
+        }
+        return; 
+    }
+    
+    method void drawCollection(boolean isBlack) {
+        var int i; 
+        var Rectangle tmp; 
+        let i = 0; 
+        do Screen.setColor(isBlack); 
+        while (i < len) {
+            let tmp = falling[i]; 
+			if (tmp.isValid()) {
+				
+			}
+			let i = i + 1; 
+        }
+
+        return; 
+    }
+    
+
+    method void advanceCollection() {
+        var int i; 
+        var Rectangle tmp; 
+        let i = 0; 
+        while (i < len) {
+			let tmp = falling[i]; 
+			if (tmp.isValid()) {
+                //do tmp.draw(false); 
+			    do tmp.moveDown(); 
+                //do tmp.draw(true); 
+			}
+			let i = i + 1; 
+        }
+
+        return; 
+    }
+
+    method void advancePlayer(int direction) {
+        // Directions: -1 is left , 0 is stay , 1 is right
+        if (direction = -1) {
+            do player.moveLeft(); 
+        }
+        if (direction = 1) {
+            do player.moveRight(); 
+        }
+
+        return; 
+    }
+
+    
+
+}

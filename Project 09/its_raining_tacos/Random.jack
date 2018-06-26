@@ -1,0 +1,44 @@
+class Random {
+    
+	field int a, b, c; 
+	
+    constructor Random new() {
+        let a = 25337.0; 
+        let b = 8678.0; 
+        let c = 2274.0; 
+
+        return this; 
+    }
+
+    method void dispose() {
+        do Memory.deAlloc(this); 
+        return; 
+    }
+
+    method int mod(int a, int b) {
+        var int ret; 
+        let ret = a - ((a/b) * b); 
+        return ret; 
+     }
+     
+    /** returns random between "beg" and "end" (not include end) */
+    method int rand(int beg, int end) {
+        var int ret,t; 
+
+        let a = mod( ( (171 * a) + 31) , 30269); 
+        let b = mod( ( (171 * b) + 17) , 30307); 
+        let c = mod( ( (171 * c) + 13) , 30323); 
+
+
+        let ret = a + b + c; 
+        let ret = (mod(ret, (end - beg)) ) + beg; 
+        if (ret<0){
+            let t = -1;
+            let ret = ret * t;
+        }
+        return ret; 
+    }
+
+   
+   
+}
