@@ -92,7 +92,7 @@ class Game {
         return; 
     }
 
-    method void tik() {
+    method void tok() {
         var int i; 
         let tik = tik + 1; 
         let levelCounter = levelCounter + 1; 
@@ -154,7 +154,7 @@ class Game {
             while (key = 0) {
                 let key = Keyboard.keyPressed(); 
                 do round(direction); 
-                do tik(); 
+                do tok(); 
                 if (~alive) {
                     do reset(); 
                 }
@@ -169,7 +169,7 @@ class Game {
             while (~(key = 0)) {
                 let key = Keyboard.keyPressed(); 
                 do round(direction); 
-                do tik(); 
+                do tok(); 
                 if (~alive) {
                     do reset(); 
                 }
