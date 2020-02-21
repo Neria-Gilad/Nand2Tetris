@@ -1,6 +1,6 @@
 # Nand2Tetris
 
-> Developed by [**Neria Tzidkani**](https://neriat.github.io) & [**Gilad Weiss**](http://homedir.jct.ac.il/~giladnac/), software engineering students at JCT.
+> Developed by [**Neria Tzidkani**](https://neriat.github.io) & [**Gilad Weiss**](https://weissgilad.github.io), software engineering students at JCT.
 
 ## Used Language
 **Golang** (a.k.a go!)
